@@ -75,7 +75,61 @@ class TradingCardContainer extends React.Component {
     }
 
     return (
-      <div id="container">{tradingCards}</div>
+      <div>
+        <TradingCardForm />
+        <div id="container">{tradingCards}</div>
+      </div>
+    );
+  }
+}
+
+class TradingCardForm extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      name: '',
+      skill: ''
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSkillChange = this.handleSkillChange.bind(this);
+    this.addNewCard = this.addNewCard.bind(this);
+  }
+
+  addNewCard() {
+    const formData = {
+      name: this.state.name,
+      skill: this.state.skill
+    }
+    $.post('/api/cards', formData, () => this.setState({}));
+  }
+
+  handleNameChange(e) {
+    this.setState({name: e.target.value});
+  }
+
+  handleSkillChange(e) {
+    this.setState({skill: e.target.value});
+  }
+
+  render () {
+    return (
+      <form>
+        <label htmlFor="name">Name:</label>
+        <input
+          id="name"
+          type="text"
+          value={this.state.name}
+          onChange={(this.handleNameChange)}
+        />
+        <label htmlFor="skill">Skill:</label>
+        <input
+          id="skill"
+          type="text"
+          value={this.state.skill}
+          onChange={this.handleSkillChange}
+        />
+        <button onClick={this.addNewCard}>Add</button>
+      </form>
     );
   }
 }
