@@ -43,6 +43,7 @@ class TradingCardContainer extends React.Component {
     super();
     this.state = {cards: []}
     this.updateCards = this.updateCards.bind(this);
+    this.getAllCards = this.getAllCards.bind(this);
   }
 
   getAllCards() {
@@ -60,6 +61,7 @@ class TradingCardContainer extends React.Component {
   componentDidMount() {
     this.getAllCards();
   }
+  
   render() {
     const tradingCards = [];
 
@@ -76,7 +78,8 @@ class TradingCardContainer extends React.Component {
 
     return (
       <div>
-        <TradingCardForm />
+        <TradingCardForm 
+        getAllCards= {this.getAllCards}/>
         <div id="container">{tradingCards}</div>
       </div>
     );
@@ -95,12 +98,14 @@ class TradingCardForm extends React.Component {
     this.addNewCard = this.addNewCard.bind(this);
   }
 
-  addNewCard() {
+  addNewCard(evt) {
+    evt.preventDefault();
     const formData = {
       name: this.state.name,
       skill: this.state.skill
     }
-    $.post('/api/cards', formData, () => this.setState({}));
+    $.post('/api/cards', formData, () => this.props.getAllCards());
+    this.setState({name: '', skill: ''});
   }
 
   handleNameChange(e) {
